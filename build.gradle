@@ -1,0 +1,30 @@
+plugins {
+    id 'java'
+    id'jacoco'
+    id "org.sonarqube" version "3.0"
+    id 'com.palantir.docker-compose' version '0.25.0'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+
+sonarqube {
+    properties {
+        property 'sonar.host.url', 'http://localhost:9000'
+        property "sonar.scm.disabled", "True"
+    }
+}
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+}
+test.finalizedBy jacocoTestReport
+tasks['sonarqube'].dependsOn test
+test {
+    useJUnitPlatform()
+}
